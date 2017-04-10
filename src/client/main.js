@@ -1,27 +1,26 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import {Router} from 'react-router-dom'
-import {Provider} from 'react-redux'
-import createBrowserHistory from 'history/createBrowserHistory'
+/* global window, document */
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Router } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import createBrowserHistory from 'history/createBrowserHistory';
 
 import App from './pages/App';
 import createStore from '../common/redux/store';
-import rootSaga from '../common/redux/sagas';
 
-const initialState = window.__INITIAL_STATE__;
+const initialState = window.__INITIAL_STATE__; // eslint-disable-line no-underscore-dangle
 const store = createStore(initialState);
 const history = createBrowserHistory();
-
-store.runSaga(rootSaga);
 
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
-      <App/>
+      <App />
     </Router>
   </Provider>,
   document.getElementById('app'),
   () => {
-    delete window.__INITIAL_STATE__
-  }
+    delete window.__INITIAL_STATE__; // eslint-disable-line no-underscore-dangle
+  },
 );

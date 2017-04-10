@@ -1,0 +1,7 @@
+{
+  "extends": "airbnb",
+  "parser": "babel-eslint",
+  "rules": {
+    "react/jsx-filename-extension": "off" // https://github.com/zeit/next.js/issues/200
+  }
+}

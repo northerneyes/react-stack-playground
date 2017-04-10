@@ -1,16 +1,16 @@
+/* global window */
+
 import React from 'react';
-import {object} from 'prop-types';
+import { object } from 'prop-types';
 import hoistStatics from 'hoist-non-react-statics';
 
-const getDisplayName = WrappedComponent => {
-  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
-};
+const getDisplayName = WrappedComponent => WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
 export default function fetch(fn) {
-  return WrappedComponent => {
+  return (WrappedComponent) => {
     class FetchOnLoad extends React.Component {
       componentDidMount() {
-        if (!window.__INITIAL_STATE__) {
+        if (!window.__INITIAL_STATE__) { // eslint-disable-line no-underscore-dangle
           fn(this.context.store);
         }
       }
@@ -23,7 +23,7 @@ export default function fetch(fn) {
     }
 
     FetchOnLoad.contextTypes = {
-      store: React.PropTypes.object.isRequired
+      store: object.isRequired,
     };
 
     FetchOnLoad.displayName = `Fetch(${getDisplayName(WrappedComponent)})`;

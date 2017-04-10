@@ -8,7 +8,6 @@ module.exports = {
       'react-dom',
       'react-router-dom',
       'react-redux',
-      'redux-saga'
     ],
     app: './src/client/index.js'
   },
