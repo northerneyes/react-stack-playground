@@ -1,8 +1,8 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import {string, func} from 'prop-types';
 import {connect} from 'react-redux';
-import {provideHooks} from 'redial';
 
-import * as homeActions from '../../../common/redux/home/home.actions';
+import {loadHomeNewData} from '../../../common/redux/home/home.actions';
 
 function mapStateToProps(state) {
   return {
@@ -10,24 +10,21 @@ function mapStateToProps(state) {
   }
 }
 
-const hooks = {
-  fetch: ({dispatch}) => dispatch(homeActions.loadHome())
-};
-
 class Home extends React.Component {
   render() {
     return (
       <div>
         <h1>Home</h1>
         <p>{this.props.home}</p>
+        <button onClick={this.props.loadHomeNewData}>Load home new data</button>
       </div>
     )
   }
 }
 
 Home.propTypes = {
-  home: PropTypes.string.isRequired
+  home: string.isRequired,
+  loadHomeNewData: func.isRequired
 };
 
-const ConnectedComponent = connect(mapStateToProps)(Home);
-export default provideHooks(hooks)(ConnectedComponent);
+export default connect(mapStateToProps, {loadHomeNewData})(Home);

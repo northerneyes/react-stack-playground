@@ -3,36 +3,70 @@ import {StaticRouter} from 'react-router-dom';
 import ReactDOMServer from 'react-dom/server';
 import {Provider} from 'react-redux'
 import express from 'express';
-import {trigger} from 'redial';
+import {flushServerSideRequirePaths} from 'react-loadable/lib';
 
 import App from '../client/pages/App';
-import Html from './Html';
-import match from '../common/match';
 import createStore from '../common/redux/store';
-import AsyncProvider from '../client/components/AsyncProvider';
 
 const app = express();
 app.use('/assets', express.static('dist', {maxAge: '200d'}));
 
+const webpackStats = require('../../output-webpack-stats.json');
+
+const modules = {};
+const bundles = {};
+
+webpackStats.modules.forEach(module => {
+  const parts = module.identifier.split('!');
+  const filePath = parts[parts.length - 1];
+  modules[filePath] = module.chunks;
+});
+
+webpackStats.chunks.forEach(chunk => {
+  bundles[chunk.id] = chunk.files;
+});
+
 function render(req, res) {
-  const location = req.url;
   const store = createStore();
 
-  match(location, store).then(({components, resolvers}) => {
-    return trigger('fetch', Object.keys(components).map(key => components[key]), {dispatch: store.dispatch}).then(() => {
-      const html = ReactDOMServer.renderToString(
-        <Provider store={store}>
-          <AsyncProvider components={components} resolvers={resolvers}>
-            <StaticRouter location={req.url} context={{}}>
-              <App/>
-            </StaticRouter>
-          </AsyncProvider>
-        </Provider>
-      );
-      const markup = ReactDOMServer.renderToString(<Html html={html} state={store.getState()}/>);
-      res.status(200).send(`<!DOCTYPE html>${markup}`);
+  const app = ReactDOMServer.renderToString(
+    <Provider store={store}>
+      <StaticRouter location={req.url} context={{}}>
+        <App/>
+      </StaticRouter>
+    </Provider>
+  );
+
+  const requires = flushServerSideRequirePaths();
+  const scripts = [];
+
+  requires.forEach(file => {
+    let matchedBundles = modules[file + '.js'];
+    matchedBundles.forEach(bundle => {
+      bundles[bundle].forEach(script => {
+        scripts.unshift(script);
+      });
     });
   });
+
+  res.send(`
+    <!doctype html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <title>react-loadable-example</title>
+      </head>
+      <body>
+        <div id="app">${app}</div>
+        <script type="text/javascript" src="assets/manifest.js"></script>        
+        <script type="text/javascript" src="assets/vendor.js"></script>
+        ${scripts.map(script => {
+          return `<script type="text/javascript" src="assets/${script}"></script>`
+        }).join('\n')}
+        <script type="text/javascript" src="assets/app.js"></script>
+      </body>
+    </html>
+  `);
 }
 
 app.get('*', render);

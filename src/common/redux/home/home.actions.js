@@ -12,3 +12,7 @@ export function loadHome() {
     });
   }
 }
+
+export function loadHomeNewData() {
+  return {type: 'LOAD_HOME_NEW_DATA'};
+}

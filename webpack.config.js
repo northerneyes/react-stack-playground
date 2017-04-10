@@ -2,9 +2,18 @@ const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
-  entry: './src/client/index.js',
+  entry: {
+    vendor: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'react-redux',
+      'redux-saga'
+    ],
+    app: './src/client/index.js'
+  },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: './assets/'
   },
@@ -17,7 +26,9 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              plugins: ['syntax-dynamic-import'],
+              plugins: [
+                'syntax-dynamic-import'
+              ],
               presets: [
                 'react',
                 ['env', {
@@ -30,5 +41,11 @@ module.exports = {
         ]
       }
     ]
-  }
+  },
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin({
+      name: ['vendor', 'manifest'],
+      minChunks: Infinity
+    })
+  ]
 };

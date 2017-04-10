@@ -1,18 +1,12 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import {string} from 'prop-types';
 import {connect} from 'react-redux';
-import {provideHooks} from 'redial';
-
-import * as helpActions from '../../../common/redux/help/help.actions';
 
 function mapStateToProps(state) {
   return {
     help: state.help
   }
 }
-
-const hooks = {
-  fetch: ({dispatch}) => dispatch(helpActions.loadHelp())
-};
 
 class Help extends React.Component {
   render() {
@@ -26,8 +20,7 @@ class Help extends React.Component {
 }
 
 Help.propTypes = {
-  help: PropTypes.string.isRequired
+  help: string.isRequired
 };
 
-const ConnectedComponent = connect(mapStateToProps)(Help);
-export default provideHooks(hooks)(ConnectedComponent);
+export default connect(mapStateToProps)(Help);

@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link, Route} from 'react-router-dom';
-import AsyncRoute from '../../components/AsyncRoute';
+import Home from '../../pages/Home/HomeAsync';
+import Help from '../../pages/Help/HelpAsync';
 
 export default class App extends React.Component {
   render() {
@@ -12,8 +13,8 @@ export default class App extends React.Component {
           <Link to="/home">Home</Link>
           <Link to="/help">Help</Link>
         </nav>
-        <AsyncRoute path="/home" getComponent={() => import('../Home')}/>
-        <AsyncRoute path="/help" getComponent={() => import('../Help')}/>
+        <Route path="/home" component={Home}/>
+        <Route path="/help" component={Help}/>
       </div>
     )
   }

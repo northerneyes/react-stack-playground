@@ -6,28 +6,33 @@
   "author": "Slava Shkodin",
   "license": "MIT",
   "scripts": {
-    "start": "webpack --progress --watch & nodemon ./src/server"
+    "start": "webpack --json > output-webpack-stats.json && webpack --progress --watch & nodemon ./src/server"
   },
   "dependencies": {
-    "babel-core": "6.23.1",
-    "babel-loader": "6.3.0",
-    "babel-plugin-dynamic-import-node": "1.0.0",
+    "babel-core": "6.24.1",
+    "babel-loader": "6.4.1",
+    "babel-plugin-dynamic-import-node": "1.0.1",
     "babel-plugin-syntax-dynamic-import": "6.18.0",
-    "babel-preset-env": "1.1.8",
-    "babel-preset-react": "6.23.0",
-    "babel-register": "6.23.0",
-    "express": "4.14.1",
+    "babel-polyfill": "6.23.0",
+    "babel-preset-env": "1.3.3",
+    "babel-preset-react": "6.24.1",
+    "babel-register": "6.24.1",
+    "express": "4.15.2",
     "history": "4.5.1",
-    "react": "15.4.2",
-    "react-dom": "15.4.2",
-    "react-redux": "5.0.2",
-    "react-router-dom": "4.0.0-beta.6",
+    "prop-types": "15.5.6",
+    "react": "15.5.3",
+    "react-dom": "15.5.3",
+    "react-loadable": "https://github.com/thejameskyle/react-loadable.git#flushServerSideRenders",
+    "react-redux": "5.0.4",
+    "react-router": "4.0.0",
+    "react-router-dom": "4.0.0",
     "redial": "0.5.0",
     "redux": "3.6.0",
+    "redux-saga": "0.14.6",
     "redux-thunk": "2.2.0"
   },
   "devDependencies": {
     "nodemon": "1.11.0",
-    "webpack": "2.2.1"
+    "webpack": "2.3.3"
   }
 }
