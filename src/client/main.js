@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom'
 import {Router} from 'react-router-dom'
 import {Provider} from 'react-redux'
 import createBrowserHistory from 'history/createBrowserHistory'
-import {trigger} from 'redial';
 
 import App from './pages/App';
 import createStore from '../common/redux/store';
@@ -21,5 +20,8 @@ ReactDOM.render(
       <App/>
     </Router>
   </Provider>,
-  document.getElementById('app')
+  document.getElementById('app'),
+  () => {
+    delete window.__INITIAL_STATE__
+  }
 );
