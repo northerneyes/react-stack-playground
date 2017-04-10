@@ -39,7 +39,7 @@ function renderApp(store, req) {
   );
 }
 
-function render(req, res) {
+async function render(req, res) {
   const store = createStore();
 
   // First render to get modules paths
@@ -57,23 +57,23 @@ function render(req, res) {
     });
   });
 
-  Promise.all(
+  await Promise.all(
     requires
       .map(file => babelInterop(require(file)))
       .filter(component => Boolean(component && component.fetch))
       .map(component => component.fetch(store))
-  ).then(() => {
-      const html = renderApp(store, req);
-      const markup = ReactDOMServer.renderToString(
-        <Html
-          html={html}
-          state={store.getState()}
-          scripts={scripts}
-        />
-      );
+  );
 
-      res.status(200).send(`<!DOCTYPE html>${markup}`);
-    });
+  const html = renderApp(store, req);
+  const markup = ReactDOMServer.renderToString(
+    <Html
+      html={html}
+      state={store.getState()}
+      scripts={scripts}
+    />
+  );
+
+  res.status(200).send(`<!DOCTYPE html>${markup}`);
 }
 
 app.get('*', render);
