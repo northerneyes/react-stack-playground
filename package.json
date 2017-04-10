@@ -6,7 +6,9 @@
   "author": "Slava Shkodin",
   "license": "MIT",
   "scripts": {
-    "start": "webpack --json > output-webpack-stats.json && webpack --progress --watch & nodemon ./src/server"
+    "stats": "node processStats.js",
+    "server": "webpack --progress --watch & nodemon ./src/server",
+    "start": "run-s stats server"
   },
   "dependencies": {
     "babel-core": "6.24.1",
@@ -33,6 +35,7 @@
   },
   "devDependencies": {
     "nodemon": "1.11.0",
+    "npm-run-all": "4.0.2",
     "webpack": "2.3.3"
   }
 }

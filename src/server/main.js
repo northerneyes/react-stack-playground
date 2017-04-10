@@ -11,18 +11,16 @@ import createStore from '../common/redux/store';
 const app = express();
 app.use('/assets', express.static('dist', {maxAge: '200d'}));
 
-const webpackStats = require('../../output-webpack-stats.json');
+const webpackStats = require('../../stats.json');
 
 const modules = {};
 const bundles = {};
 
-webpackStats.modules.forEach(module => {
-  const parts = module.identifier.split('!');
-  const filePath = parts[parts.length - 1];
-  modules[filePath] = module.chunks;
+(webpackStats.modules || []).forEach(module => {
+  modules[module.identifier] = module.chunks;
 });
 
-webpackStats.chunks.forEach(chunk => {
+(webpackStats.chunks || []).forEach(chunk => {
   bundles[chunk.id] = chunk.files;
 });
 
