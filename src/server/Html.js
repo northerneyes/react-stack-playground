@@ -7,7 +7,6 @@ function Html(props) {
       <body>
         <div id="app" dangerouslySetInnerHTML={{__html: props.html}}></div>
         <script dangerouslySetInnerHTML={{__html: `window.__INITIAL_STATE__ = ${JSON.stringify(props.state)}`}}></script>
-        <script dangerouslySetInnerHTML={{__html: `window.__LOADED_MODULES__ = ${JSON.stringify(props.modulesWebpackIds)}`}}></script>
         <script src="assets/manifest.js"/>
         <script src="assets/vendor.js"/>
         {props.scripts.map(script =>
@@ -22,8 +21,7 @@ function Html(props) {
 Html.propTypes = {
   html: string.isRequired,
   state: object.isRequired,
-  scripts: array.isRequired,
-  modulesWebpackIds: array.isRequired
+  scripts: array.isRequired
 };
 
 export default Html;
