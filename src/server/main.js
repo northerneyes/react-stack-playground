@@ -9,15 +9,12 @@ import { flushServerSideRequirePaths } from 'react-loadable/lib';
 import Html from './Html';
 import App from '../client/pages/App';
 import createStore from '../common/redux/store';
+import FetchProvider from '../client/FetchProvider';
 
 const app = express();
 app.use('/assets', express.static('dist', { maxAge: '200d' }));
 
 const webpackStats = require('../../stats.json');
-
-const babelInterop = obj => (
-  obj && obj.__esModule ? obj.default : obj // eslint-disable-line no-underscore-dangle
-);
 
 const modules = {};
 const bundles = {};
@@ -30,12 +27,14 @@ const bundles = {};
   bundles[chunk.id] = chunk.files;
 });
 
-function renderApp(store, req) {
+function renderApp(store, req, fetches) {
   return ReactDOMServer.renderToString(
     <Provider store={store}>
-      <StaticRouter location={req.url} context={{}}>
-        <App />
-      </StaticRouter>
+      <FetchProvider fetches={fetches}>
+        <StaticRouter location={req.url} context={{}}>
+          <App />
+        </StaticRouter>
+      </FetchProvider>
     </Provider>,
   );
 }
@@ -43,8 +42,12 @@ function renderApp(store, req) {
 async function render(req, res) {
   const store = createStore();
 
-  // First render to get modules paths
-  renderApp(store, req);
+  // First render to collect all fetches
+  const fetches = [];
+  renderApp(store, req, fetches);
+
+  const promises = fetches.map(fetch => fetch(store));
+  await Promise.all(promises);
 
   const requires = flushServerSideRequirePaths();
   const scripts = [];
@@ -57,15 +60,6 @@ async function render(req, res) {
       });
     });
   });
-
-  await Promise.all(
-    requires
-      /* eslint-disable global-require, import/no-dynamic-require */
-      .map(file => babelInterop(require(file)))
-      /* eslint-disable global-require, import/no-dynamic-require */
-      .filter(component => Boolean(component && component.fetch))
-      .map(component => component.fetch(store)),
-  );
 
   const html = renderApp(store, req);
   const markup = ReactDOMServer.renderToString(
