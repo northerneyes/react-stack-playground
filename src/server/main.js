@@ -56,7 +56,7 @@ function render(req, res) {
       </head>
       <body>
         <div id="app">${app}</div>
-        <script type="text/javascript" src="assets/manifest.js"></script>        
+        <script type="text/javascript" src="assets/manifest.js"></script>
         <script type="text/javascript" src="assets/vendor.js"></script>
         ${scripts.map(script => {
           return `<script type="text/javascript" src="assets/${script}"></script>`
