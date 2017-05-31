@@ -1,6 +1,11 @@
 const webpack = require('webpack');
 const path = require('path');
 
+const WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
+const webpackIsomorphicAssets = require('./assets');
+
+const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(webpackIsomorphicAssets);
+
 module.exports = {
   entry: {
     vendor: [
@@ -12,7 +17,7 @@ module.exports = {
     app: './src/client/index.js'
   },
   output: {
-    filename: '[name].js',
+    filename: '[name]-[chunkhash].js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/assets/'
   },
@@ -42,6 +47,7 @@ module.exports = {
     ]
   },
   plugins: [
+    webpackIsomorphicToolsPlugin.development(),
     new webpack.optimize.CommonsChunkPlugin({
       name: ['vendor', 'manifest'],
       minChunks: Infinity

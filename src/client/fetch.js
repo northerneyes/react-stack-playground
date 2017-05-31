@@ -6,8 +6,8 @@ import hoistStatics from 'hoist-non-react-statics';
 
 const getDisplayName = WrappedComponent => WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
-export default function fetch(fn) {
-  const fetch = props => store => fn(store, props)
+export default function (fn) {
+  const fetch = props => store => fn(store, props);
 
   return (WrappedComponent) => {
     class FetchOnLoad extends React.Component {
@@ -34,7 +34,7 @@ export default function fetch(fn) {
 
     FetchOnLoad.contextTypes = {
       store: object.isRequired,
-      fetches: React.PropTypes.array
+      fetches: React.PropTypes.array,
     };
 
     FetchOnLoad.displayName = `Fetch(${getDisplayName(WrappedComponent)})`;

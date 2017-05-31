@@ -52,6 +52,11 @@ async function render(req, res) {
   const requires = flushServerSideRequirePaths();
   const scripts = [];
 
+  const {
+    javascript: mainScripts
+  } = global.webpackIsomorphicTools.assets();
+  global.webpackIsomorphicTools.refresh();
+
   requires.forEach((file) => {
     const matchedBundles = modules[`${file}.js`];
     matchedBundles.forEach((bundle) => {
@@ -67,6 +72,7 @@ async function render(req, res) {
       html={html}
       state={store.getState()}
       scripts={scripts}
+      mainScripts={mainScripts}
     />,
   );
 
