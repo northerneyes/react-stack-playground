@@ -27,7 +27,7 @@
     "prop-types": "15.5.6",
     "react": "15.5.3",
     "react-dom": "15.5.3",
-    "react-loadable": "https://github.com/thejameskyle/react-loadable.git#flushServerSideRenders",
+    "react-loadable": "^3.3.1",
     "react-redux": "5.0.4",
     "react-router": "4.0.0",
     "react-router-dom": "4.0.0",
