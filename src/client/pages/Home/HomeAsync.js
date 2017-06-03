@@ -1,5 +1,5 @@
 import path from 'path';
-import Loadable from 'react-loadable/lib';
+import Loadable from 'react-loadable';
 
 export default Loadable({
   loader: () => import('./index'),

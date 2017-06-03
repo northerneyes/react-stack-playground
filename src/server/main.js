@@ -4,7 +4,7 @@ import ReactDOMServer from 'react-dom/server';
 import { Provider } from 'react-redux';
 import express from 'express';
 import winston from 'winston';
-import { flushServerSideRequirePaths } from 'react-loadable/lib';
+import { flushServerSideRequirePaths } from 'react-loadable';
 
 import Html from './Html';
 import App from '../client/pages/App';
